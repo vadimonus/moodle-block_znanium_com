@@ -52,7 +52,14 @@ class block_znanium_com extends block_base {
         $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $PAGE->context->id));
         $link = new action_link($url, $text);
         $link->attributes = array('target' => '_blank');
-        $this->content->text = $OUTPUT->render($link);
+        $this->content->text = html_writer::div($OUTPUT->render($link));
+        
+        if (has_capability('block/znanium_com:viewstats', context_system::instance())) {
+            $text = get_string('statistics','block_znanium_com');
+            $url = new moodle_url('/blocks/znanium_com/statistics.php');
+            $link = new action_link($url, $text);
+            $this->content->text .= html_writer::div($OUTPUT->render($link));
+        }
         return $this->content;
     }
 }
