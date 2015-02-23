@@ -12,6 +12,14 @@
 require_once("../../config.php");
 require_login();
 
+$contextid = required_param('contextid',PARAM_INT);
+
+$params = array(
+    'contextid' => $contextid
+);
+$event = \block_znanium_com\event\link_used::create($params);
+$event->trigger();
+
 $secretkey = get_config('block_znanium_com', 'secretkey');
 $domain = get_config('block_znanium_com', 'domain');
 

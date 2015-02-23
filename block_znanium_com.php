@@ -10,9 +10,11 @@
  */
 
 class block_znanium_com extends block_base {
+    
     function init() {
         $this->title = get_string('pluginname', 'block_znanium_com');
     }
+    
     function specialization() {
         $title = get_config('block_znanium_com', 'title');
         if ($title !== false) {
@@ -39,7 +41,7 @@ class block_znanium_com extends block_base {
     }
 
     function get_content () {
-        global $OUTPUT;
+        global $OUTPUT, $PAGE;
         
         $this->content = new stdClass;
         $this->content->footer = '';
@@ -47,7 +49,7 @@ class block_znanium_com extends block_base {
         if (!$text) {
             $text = get_string('defaultlink', 'block_znanium_com');
         }
-        $url = new moodle_url('/blocks/znanium_com/redirect.php');
+        $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $PAGE->context->id));
         $link = new action_link($url, $text);
         $link->attributes = array('target' => '_blank');
         $this->content->text = $OUTPUT->render($link);
