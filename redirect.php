@@ -20,6 +20,12 @@ $params = array(
 $event = \block_znanium_com\event\link_used::create($params);
 $event->trigger();
 
+$visit = new stdClass();
+$visit->time = time();
+$visit->userid = $USER->id;
+$visit->contextid = $contextid;
+$DB->insert_record('block_znanium_com_visits', $visit);
+
 $secretkey = get_config('block_znanium_com', 'secretkey');
 $domain = get_config('block_znanium_com', 'domain');
 

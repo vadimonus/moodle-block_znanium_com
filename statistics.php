@@ -5,7 +5,7 @@
  *
  * @package    block
  * @subpackage znanium_com
- * @copyright  2014 Vadim Dvorovenko
+ * @copyright  2015 Vadim Dvorovenko
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -23,12 +23,9 @@ $PAGE->set_pagelayout('report');
 
 echo $OUTPUT->header();
 
-$sql = "SELECT MIN(timecreated) AS timecreated 
-        FROM {logstore_standard_log}
-        WHERE eventname = :eventname";
-$params = array(
-        'eventname' => '\block_znanium_com\event\link_used');
-$timefirst = $DB->get_field_sql($sql, $params);
+$sql = "SELECT MIN(time) AS time
+        FROM {block_znanium_com_visits}";
+$timefirst = $DB->get_field_sql($sql);
 if ($timefirst) {
     
     $table = new html_table();
@@ -49,10 +46,9 @@ if ($timefirst) {
         
         $monthname = userdate($timestart, '%B %Y');
         $sql = "SELECT COUNT(id) AS count_id 
-            FROM {logstore_standard_log}
-            WHERE eventname = :eventname AND timecreated >= :timestart AND timecreated < :timeend";
+            FROM {block_znanium_com_visits}
+            WHERE time >= :timestart AND time < :timeend";
         $params = array(
-            'eventname' => '\block_znanium_com\event\link_used',
             'timestart' => $timestart,
             'timeend' => $timeend);
         $count = $DB->get_field_sql($sql, $params);
