@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -42,6 +42,10 @@ function xmldb_block_znanium_com_upgrade($oldversion, $block) {
 
         // Znanium_com savepoint reached.
         upgrade_block_savepoint(true, 2015022500, 'znanium_com');
+    }
+    
+    if ($oldversion < 2015110800) {
+        upgrade_block_savepoint(true, 2015110800, 'znanium_com');
     }
 
 }

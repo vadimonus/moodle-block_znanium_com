@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -12,7 +12,8 @@
 require_once("../../config.php");
 require_login();
 
-$contextid = required_param('contextid',PARAM_INT);
+$contextid = required_param('contextid', PARAM_INT);
+require_capability('block/znanium_com:use', context::instance_by_id($contextid));
 
 $params = array(
     'contextid' => $contextid

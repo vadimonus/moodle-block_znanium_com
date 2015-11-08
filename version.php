@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -11,6 +11,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015022500;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2012062502;        // Requires this Moodle version
-$plugin->component = 'block_znanium_com';     // Full name of the plugin (used for diagnostics)
+$plugin->component = 'block_znanium_com';    // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2015110800;             // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2014051200;             // Requires this Moodle version
+$plugin->maturity = MATURITY_STABLE;         // Maturity level of this plugin version
+$plugin->release = '2015-11-08';             // Human readable version name 

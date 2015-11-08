@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -15,13 +15,12 @@ $string['domain'] = 'Domain';
 $string['eventlinkused'] = 'znanium.com visited';
 $string['link'] = 'Link text';
 $string['month'] = 'Month';
-$string['pluginname'] = 'Authentification on znanium.com site';
+$string['pluginname'] = 'Authentication on znanium.com site';
 $string['secretkey'] = 'Secret key';
 $string['statistics'] = 'Statistics';
 $string['title'] = 'Block title';
 $string['visits'] = 'Visits count';
 $string['znanium_com:addinstance'] = 'Add a new znanium.com block';
 $string['znanium_com:myaddinstance'] = 'Add a new znanium.com block to home page';
+$string['znanium_com:use'] = 'Use block to visit znanium.com';
 $string['znanium_com:viewstats'] = 'View visits statistics';
-
-

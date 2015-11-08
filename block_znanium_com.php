@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -45,14 +45,16 @@ class block_znanium_com extends block_base {
         
         $this->content = new stdClass;
         $this->content->footer = '';
-        $text = get_config('block_znanium_com', 'link');
-        if (!$text) {
-            $text = get_string('defaultlink', 'block_znanium_com');
+        if (has_capability('block/znanium_com:use', $PAGE->context)) {
+            $text = get_config('block_znanium_com', 'link');
+            if (!$text) {
+                $text = get_string('defaultlink', 'block_znanium_com');
+            }
+            $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $PAGE->context->id));
+            $link = new action_link($url, $text);
+            $link->attributes = array('target' => '_blank');
+            $this->content->text = html_writer::div($OUTPUT->render($link));
         }
-        $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $PAGE->context->id));
-        $link = new action_link($url, $text);
-        $link->attributes = array('target' => '_blank');
-        $this->content->text = html_writer::div($OUTPUT->render($link));
         
         if (has_capability('block/znanium_com:viewstats', context_system::instance())) {
             $text = get_string('statistics','block_znanium_com');

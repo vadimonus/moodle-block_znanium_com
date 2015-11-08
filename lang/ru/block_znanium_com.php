@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentification on znanium.com
+ * Authentication on znanium.com
  *
  * @package    block
  * @subpackage znanium_com
@@ -22,4 +22,5 @@ $string['title'] = 'Заголовок блока';
 $string['visits'] = 'Число переходов';
 $string['znanium_com:addinstance'] = 'Добавлять блок znanium.com';
 $string['znanium_com:myaddinstance'] = 'Добавлять блок znanium.com на домашнюю страницу';
+$string['znanium_com:use'] = 'Использовать блок для перехода на znanium.com';
 $string['znanium_com:viewstats'] = 'Просматривать статистику переходов';

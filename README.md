@@ -1,4 +1,4 @@
-Authentification on znanium.com
+Authentication on znanium.com
 ===============================
 
 This block is intended for use with russian electronic library system znanium.com, 
@@ -19,7 +19,7 @@ Links
 Блок аутентификации на сайте znanium.com
 ========================================
 
-Блок предназначен джля автоматическей аутентификации пользователей moodle на сайте znanium.com.
+Блок предназначен для автоматическей аутентификации пользователей moodle на сайте znanium.com.
 
 Данные для авторизации (домен и секретный ключ) зарегистрированные пользователи ЭБС могут получить, написав по адресу programmer@infra-m.ru
 
