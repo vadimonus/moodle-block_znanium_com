@@ -1,20 +1,40 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Authentication on znanium.com
  *
- * @package    block
- * @subpackage znanium_com
+ * @package    block_znanium_com
  * @copyright  2015 Vadim Dvorovenko
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Upgrade code for the HTML block.
+ *
+ * @param int $oldversion
+ * @param object $block
+ * @return void
+ */
 function xmldb_block_znanium_com_upgrade($oldversion, $block) {
     global $DB;
 
-    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
     if ($oldversion < 2015022500) {
 
@@ -43,7 +63,7 @@ function xmldb_block_znanium_com_upgrade($oldversion, $block) {
         // Znanium_com savepoint reached.
         upgrade_block_savepoint(true, 2015022500, 'znanium_com');
     }
-    
+
     if ($oldversion < 2015110800) {
         upgrade_block_savepoint(true, 2015110800, 'znanium_com');
     }
