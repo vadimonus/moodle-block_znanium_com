@@ -68,4 +68,6 @@ function xmldb_block_znanium_com_upgrade($oldversion, $block) {
         upgrade_block_savepoint(true, 2015110800, 'znanium_com');
     }
 
+    return true;
+
 }
