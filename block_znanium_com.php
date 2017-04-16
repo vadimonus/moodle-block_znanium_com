@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Main block class
  *
@@ -32,9 +34,9 @@
 class block_znanium_com extends block_base {
 
     /**
-    * Standard block API function for initializing block instance.
-    * @return void
-    */
+     * Standard block API function for initializing block instance.
+     * @return void
+     */
     public function init() {
         $this->title = get_string('pluginname', 'block_znanium_com');
     }
