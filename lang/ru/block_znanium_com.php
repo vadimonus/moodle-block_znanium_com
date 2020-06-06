@@ -29,6 +29,7 @@ $string['eventlinkused'] = 'Осуществлен преход на сайт Э
 $string['link'] = 'Текст ссылки';
 $string['month'] = 'Месяц';
 $string['pluginname'] = 'Аутентификация на сайте znanium.com';
+$string['privacy:metadata'] = 'Плагин не хранит персональные данные.';
 $string['secretkey'] = 'Секретный ключ';
 $string['statistics'] = 'Статистика';
 $string['title'] = 'Заголовок блока';

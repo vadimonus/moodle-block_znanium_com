@@ -18,23 +18,33 @@
  * Authentication on znanium.com
  *
  * @package    block_znanium_com
- * @copyright  2014 Vadim Dvorovenko
+ * @copyright  2020 Vadim Dvorovenko
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['defaultlink'] = 'Go to znanium.com';
-$string['defaulttitle'] = 'znanium.com';
-$string['domain'] = 'Domain';
-$string['eventlinkused'] = 'znanium.com visited';
-$string['link'] = 'Link text';
-$string['month'] = 'Month';
-$string['pluginname'] = 'Authentication on znanium.com site';
-$string['privacy:metadata'] = 'The plugin does not store any personal data.';
-$string['secretkey'] = 'Secret key';
-$string['statistics'] = 'Statistics';
-$string['title'] = 'Block title';
-$string['visits'] = 'Visits count';
-$string['znanium_com:addinstance'] = 'Add a new znanium.com block';
-$string['znanium_com:myaddinstance'] = 'Add a new znanium.com block to home page';
-$string['znanium_com:use'] = 'Use block to visit znanium.com';
-$string['znanium_com:viewstats'] = 'View visits statistics';
+namespace block_znanium_com\privacy;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Privacy Subsystem.
+ *
+ * @package    block_znanium_com
+ * @copyright  2020 Vadim Dvorovenko
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    use \core_privacy\local\legacy_polyfill;
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function _get_reason() {
+        return 'privacy:metadata';
+    }
+}
