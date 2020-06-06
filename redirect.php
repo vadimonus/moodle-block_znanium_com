@@ -43,16 +43,17 @@ $DB->insert_record('block_znanium_com_visits', $visit);
 $secretkey = get_config('block_znanium_com', 'secretkey');
 $domain = get_config('block_znanium_com', 'domain');
 
-$timestamp = date('YmdHis');
-$signature = md5($USER->id . $secretkey . $timestamp);
+$timestamp = gmdate('YmdHis');
+$signature = md5($domain . $USER->username . $timestamp . $secretkey);
 $params = array(
     'domain' => $domain,
-    'id' => $USER->id,
-    'login' => $USER->username,
-    'name' => $USER->firstname,
-    'patr' => '',
-    'lname' => $USER->lastname,
-    'time' => $timestamp,
-    'sign' => $signature);
-$url = new moodle_url('http://znanium.com/autosignon.php', $params);
+    'username' => $USER->username,
+    'gmt' => $timestamp,
+    'token' => $signature,
+    'fname' => $USER->firstname,
+    'lname' => $USER->lastname);
+if ($USER->middlename) {
+    $params['mname'] = $USER->middlename;
+}
+$url = new moodle_url('https://new.znanium.com/sso', $params);
 redirect($url);

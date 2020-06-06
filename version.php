@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_znanium_com';    // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2017041601;             // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2020060600;             // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2014051200;             // Requires this Moodle version.
 $plugin->maturity = MATURITY_STABLE;         // Maturity level of this plugin version.
-$plugin->release = '2017-04-16';             // Human readable version name.
+$plugin->release = '2020-06-06';             // Human readable version name.
