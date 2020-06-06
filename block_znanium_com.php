@@ -58,12 +58,6 @@ class block_znanium_com extends block_base {
     /**
      * Which page types this block may appear on.
      *
-     * The information returned here is processed by the
-     * {@link blocks_name_allowed_in_format()} function. Look there if you need
-     * to know exactly how this works.
-     *
-     * Default case: everything except mod and tag.
-     *
      * @return array page-type prefix => true/false.
      */
     public function applicable_formats() {
@@ -106,16 +100,16 @@ class block_znanium_com extends block_base {
      * @return stdObject
      */
     public function get_content () {
-        global $OUTPUT, $PAGE;
+        global $OUTPUT;
 
         $this->content = new stdClass;
         $this->content->footer = '';
-        if (has_capability('block/znanium_com:use', $PAGE->context)) {
+        if (has_capability('block/znanium_com:use', $this->page->context)) {
             $text = get_config('block_znanium_com', 'link');
             if (!$text) {
                 $text = get_string('defaultlink', 'block_znanium_com');
             }
-            $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $PAGE->context->id));
+            $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $this->page->context->id));
             $link = new action_link($url, $text);
             $link->attributes = array('target' => '_blank');
             $this->content->text = html_writer::div($OUTPUT->render($link));
