@@ -64,5 +64,11 @@ $params = array(
 if ($USER->middlename) {
     $params['mname'] = $USER->middlename;
 }
-$url = new moodle_url('https://new.znanium.com/sso', $params);
+if ($documentid) {
+    $params['did'] = $documentid;
+    if ($page) {
+        $params['page'] = $page;
+    }
+}
+$url = new moodle_url('https://znanium.com/sso', $params);
 redirect($url);
