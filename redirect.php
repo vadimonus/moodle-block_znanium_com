@@ -25,8 +25,17 @@
 require_once("../../config.php");
 require_login();
 
-$contextid = required_param('contextid', PARAM_INT);
-require_capability('block/znanium_com:use', context::instance_by_id($contextid));
+$contextid = optional_param('contextid', null, PARAM_INT);
+if ($contextid) {
+    $context = context::instance_by_id($contextid);
+} else {
+    $context = context_system::instance();
+    $contextid = $context->id;
+}
+require_capability('block/znanium_com:use', $context);
+
+$documentid = optional_param('documentid', null, PARAM_INT);
+$page = optional_param('page', null, PARAM_INT);
 
 $params = array(
     'contextid' => $contextid
