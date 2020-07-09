@@ -22,19 +22,19 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['defaultlink'] = 'Перейти на сайт ЭБС znanium.com';
-$string['defaulttitle'] = 'znanium.com';
+$string['defaultlink'] = 'Перейти на сайт ЭБС Znanium';
+$string['defaulttitle'] = 'ЭБС Znanium';
 $string['domain'] = 'Домен';
-$string['eventlinkused'] = 'Осуществлен преход на сайт ЭБС znanium.com';
+$string['eventlinkused'] = 'Осуществлен преход на сайт ЭБС Znanium';
 $string['link'] = 'Текст ссылки';
 $string['month'] = 'Месяц';
-$string['pluginname'] = 'Аутентификация на сайте znanium.com';
+$string['pluginname'] = 'Аутентификация на сайте ЭБС Znanium';
 $string['privacy:metadata'] = 'Плагин не хранит персональные данные.';
 $string['secretkey'] = 'Секретный ключ';
 $string['statistics'] = 'Статистика';
 $string['title'] = 'Заголовок блока';
 $string['visits'] = 'Число переходов';
-$string['znanium_com:addinstance'] = 'Добавлять блок znanium.com';
-$string['znanium_com:myaddinstance'] = 'Добавлять блок znanium.com на домашнюю страницу';
-$string['znanium_com:use'] = 'Использовать блок для перехода на znanium.com';
+$string['znanium_com:addinstance'] = 'Добавлять блок ЭБС Znanium';
+$string['znanium_com:myaddinstance'] = 'Добавлять блок ЭБС Znanium на домашнюю страницу';
+$string['znanium_com:use'] = 'Использовать блок для перехода на сайт ЭБС Znanium';
 $string['znanium_com:viewstats'] = 'Просматривать статистику переходов';
