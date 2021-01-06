@@ -88,58 +88,24 @@ class provider implements
      * @return contextlist
      */
     public static function _get_contexts_for_userid($userid) {
-        $sql = "SELECT DISTINCT contextid
-              FROM {block_znanium_com_visits}
-             WHERE userid = :userid";
-        $params = ['userid' => $userid];
+        global $DB;
+
         $contextlist = new contextlist();
+
+        $sql = "SELECT DISTINCT contextid
+            FROM {block_znanium_com_visits}
+            WHERE userid = :userid";
+        $params = ['userid' => $userid];
         $contextlist->add_from_sql($sql, $params);
-        return $contextlist;
-    }
 
-    /**
-     * @param approved_contextlist $contextlist
-     */
-    public static function _export_user_data($contextlist) {
-        global $DB;
-        $contextids = $contextlist->get_contextids();
-        $user = $contextlist->get_user();
-        foreach ($contextids as $contextid) {
-            $conditions = [
-                'userid' => $user->id,
-                'contextid' => $contextid,
-            ];
-            $visits = $DB->get_records('block_znanium_com_visits', $conditions, 'time ASC');
-            $visittimes = array_values(array_map(function ($visit) {
-                return transform::datetime($visit->time);
-            }, $visits));
-            $context = \context::instance_by_id($contextid);
-            writer::with_context($context)->export_data(
-                [get_string('privacy:metadata:block_znanium_com_visit_dates', 'block_znanium_com')],
-                (object) $visittimes
-            );
+        $deletedcontexts = "SELECT bzcv.contextid
+                FROM {block_znanium_com_visits} bzcv 
+                WHERE userid = :userid
+                AND NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
+        if ($DB->record_exists_sql($deletedcontexts, $params)) {
+            $contextlist->add_system_context();
         }
-    }
-
-    /**
-     * @param \context $context
-     */
-    public static function _delete_data_for_all_users_in_context($context) {
-        global $DB;
-        $DB->set_field('block_znanium_com_visits', 'userid', null, ['contextid' => $context->id]);
-    }
-
-    /**
-     * @param approved_contextlist $contextlist
-     */
-    public static function _delete_data_for_user($contextlist) {
-        global $DB;
-        $contextids = $contextlist->get_contextids();
-        $user = $contextlist->get_user();
-        list($insql, $inparams) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED, 'contextid');
-        $params = array_merge(['userid' => $user->id], $inparams);
-        $where = 'userid = :userid AND contextid ' . $insql;
-        $DB->set_field_select('block_znanium_com_visits', 'userid', null, $where, $params);
+        return $contextlist;
     }
 
     /**
@@ -153,6 +119,87 @@ class provider implements
                 WHERE contextid = :contextid";
         $params = ['contextid' => $context->id];
         $userlist->add_from_sql('userid', $sql, $params);
+
+        if ($context instanceof \context_system) {
+            $sql = "SELECT userid AS userid
+                FROM {block_znanium_com_visits} bzcv
+                WHERE NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
+            $params = [];
+            $userlist->add_from_sql('userid', $sql, $params);
+        }
+    }
+
+    /**
+     * @param approved_contextlist $contextlist
+     */
+    public static function _export_user_data($contextlist) {
+        $userid = $contextlist->get_user()->id;
+        $contextids = $contextlist->get_contextids();
+        foreach ($contextids as $contextid) {
+            $visits = self::get_visit_times_for_context($userid, $contextid);
+            $context = \context::instance_by_id($contextid);
+            writer::with_context($context)->export_data(
+                [get_string('privacy:metadata:block_znanium_com_visit_dates', 'block_znanium_com')],
+                (object) $visits
+            );
+        }
+    }
+
+    /**
+     * @param int $userid
+     * @param int $contextid
+     * @return string[]
+     */
+    protected static function get_visit_times_for_context(int $userid, int $contextid) {
+        global $DB;
+        $conditions = [
+            'userid' => $userid,
+            'contextid' => $contextid,
+        ];
+        $visits = $DB->get_records('block_znanium_com_visits', $conditions);
+
+        if ($contextid == SYSCONTEXTID) {
+            // Adding values from missing contexts to system context
+            $deletedcontextssql = "SELECT bzcv.time
+                    FROM {block_znanium_com_visits} bzcv 
+                    WHERE userid = :userid
+                    AND NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
+            $deletedcontextparams = [
+                'userid' => $userid,
+            ];
+            $visits = array_merge(
+                $visits,
+                $DB->get_records_sql($deletedcontextssql, $deletedcontextparams)
+            );
+        }
+        $visittimes = array_map(function ($visit) {
+            return $visit->time;
+        }, $visits);
+        sort($visittimes);
+        $visittimes = array_map(function ($visittime) {
+            return transform::datetime($visittime);
+        }, $visittimes);
+        return $visittimes;
+    }
+
+    /**
+     * @param \context $context
+     */
+    public static function _delete_data_for_all_users_in_context($context) {
+        static::delete_data_for_users_and_contexts(
+            [],
+            [$context->id]
+        );
+    }
+
+    /**
+     * @param approved_contextlist $contextlist
+     */
+    public static function _delete_data_for_user($contextlist) {
+        static::delete_data_for_users_and_contexts(
+            [$contextlist->get_user()->id],
+            $contextlist->get_contextids()
+        );
     }
 
     /**
@@ -161,14 +208,46 @@ class provider implements
      * @throws \dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
-        global $DB;
-
-        $context = $userlist->get_context();
-        $userids = $userlist->get_userids();
-        list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'userid');
-        $params = array_merge(['contextid' => $context->id], $inparams);
-        $where = 'contextid = :contextid AND userid ' . $insql;
-        $DB->set_field_select('block_znanium_com_visits', 'userid', null, $where, $params);
+        static::delete_data_for_users_and_contexts(
+            $userlist->get_userids(),
+            [$userlist->get_context()->id]
+        );
     }
 
+    /**
+     * @param array $userids emptynull for all users
+     * @param array $contextids empty array for all contexts
+     */
+    protected static function delete_data_for_users_and_contexts($userids, $contextids) {
+        global $DB;
+        if ($userids) {
+            list($userwhere, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'userid');
+            $userwhere = 'userid ' . $userwhere;
+        }
+        if ($contextids) {
+            list($contextwhere, $contextparams) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED, 'contextid');
+            $contextwhere = 'contextid ' . $contextwhere;
+        }
+        $DB->set_field_select(
+            'block_znanium_com_visits',
+            'userid',
+            null,
+            $userwhere . ' AND ' . $contextwhere,
+            array_merge($userparams, $contextparams)
+        );
+
+        if ($contextids && in_array(SYSCONTEXTID, $contextids)) {
+            // Removing values for missing contexts, when requested to clear system context
+            $contextwhere = "NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = contextid)";
+            $contextparams = [];
+
+            $DB->set_field_select(
+                'block_znanium_com_visits',
+                'userid',
+                null,
+                $userwhere . ' AND ' . $contextwhere,
+                array_merge($userparams, $contextparams)
+            );
+        }
+    }
 }
