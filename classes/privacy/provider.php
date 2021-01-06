@@ -24,6 +24,8 @@
 
 namespace block_znanium_com\privacy;
 
+use context;
+use context_system;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
@@ -34,6 +36,14 @@ use core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
 
+if (interface_exists('\core_privacy\local\request\core_userlist_provider')) {
+    interface core_userlist_provider extends \core_privacy\local\request\core_userlist_provider {
+    }
+} else {
+    interface core_userlist_provider {
+    }
+}
+
 /**
  * Privacy Subsystem.
  *
@@ -42,13 +52,13 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    // The block_html block stores user provided data.
+    // The plugin stores user provided data.
     \core_privacy\local\metadata\provider,
 
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider,
+    core_userlist_provider,
 
-    // The block_html block provides data directly to core.
+    // The plugin provides data directly to core.
     \core_privacy\local\request\plugin\provider
 {
 
@@ -58,7 +68,7 @@ class provider implements
      * Returns meta data about this system.
      *
      * @param collection $collection The initialised collection to add items to.
-     * @return collection     A listing of user data stored through this system.
+     * @return collection A listing of user data stored through this system.
      */
     public static function _get_metadata(collection $collection) {
         $collection->add_external_location_link('znanium.com', [
@@ -84,8 +94,10 @@ class provider implements
     }
 
     /**
-     * @param int $userid
-     * @return contextlist
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param int $userid The user to search.
+     * @return contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
     public static function _get_contexts_for_userid($userid) {
         global $DB;
@@ -99,7 +111,7 @@ class provider implements
         $contextlist->add_from_sql($sql, $params);
 
         $deletedcontexts = "SELECT bzcv.contextid
-                FROM {block_znanium_com_visits} bzcv 
+                FROM {block_znanium_com_visits} bzcv
                 WHERE userid = :userid
                 AND NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
         if ($DB->record_exists_sql($deletedcontexts, $params)) {
@@ -109,7 +121,9 @@ class provider implements
     }
 
     /**
-     * @param userlist $userlist
+     * Get the list of users within a specific context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
@@ -120,7 +134,7 @@ class provider implements
         $params = ['contextid' => $context->id];
         $userlist->add_from_sql('userid', $sql, $params);
 
-        if ($context instanceof \context_system) {
+        if ($context instanceof context_system) {
             $sql = "SELECT userid AS userid
                 FROM {block_znanium_com_visits} bzcv
                 WHERE NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
@@ -130,14 +144,16 @@ class provider implements
     }
 
     /**
-     * @param approved_contextlist $contextlist
+     * Export all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
     public static function _export_user_data($contextlist) {
         $userid = $contextlist->get_user()->id;
         $contextids = $contextlist->get_contextids();
         foreach ($contextids as $contextid) {
             $visits = self::get_visit_times_for_context($userid, $contextid);
-            $context = \context::instance_by_id($contextid);
+            $context = context::instance_by_id($contextid);
             writer::with_context($context)->export_data(
                 [get_string('privacy:metadata:block_znanium_com_visit_dates', 'block_znanium_com')],
                 (object) $visits
@@ -146,6 +162,8 @@ class provider implements
     }
 
     /**
+     * Extracts visit times for specified user and context and formats array
+     *
      * @param int $userid
      * @param int $contextid
      * @return string[]
@@ -159,9 +177,9 @@ class provider implements
         $visits = $DB->get_records('block_znanium_com_visits', $conditions);
 
         if ($contextid == SYSCONTEXTID) {
-            // Adding values from missing contexts to system context
+            // Adding values from missing contexts to system context.
             $deletedcontextssql = "SELECT bzcv.time
-                    FROM {block_znanium_com_visits} bzcv 
+                    FROM {block_znanium_com_visits} bzcv
                     WHERE userid = :userid
                     AND NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = bzcv.contextid)";
             $deletedcontextparams = [
@@ -183,7 +201,9 @@ class provider implements
     }
 
     /**
-     * @param \context $context
+     * Delete all data for all users in the specified context.
+     *
+     * @param context $context The specific context to delete data for.
      */
     public static function _delete_data_for_all_users_in_context($context) {
         static::delete_data_for_users_and_contexts(
@@ -193,7 +213,9 @@ class provider implements
     }
 
     /**
-     * @param approved_contextlist $contextlist
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
     public static function _delete_data_for_user($contextlist) {
         static::delete_data_for_users_and_contexts(
@@ -203,9 +225,9 @@ class provider implements
     }
 
     /**
-     * @param approved_userlist $userlist
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
         static::delete_data_for_users_and_contexts(
@@ -215,7 +237,9 @@ class provider implements
     }
 
     /**
-     * @param array $userids emptynull for all users
+     * Unlinks visits for multiple users and contexts
+     *
+     * @param array $userids empty for all users
      * @param array $contextids empty array for all contexts
      */
     protected static function delete_data_for_users_and_contexts($userids, $contextids) {
@@ -237,7 +261,7 @@ class provider implements
         );
 
         if ($contextids && in_array(SYSCONTEXTID, $contextids)) {
-            // Removing values for missing contexts, when requested to clear system context
+            // Removing values for missing contexts, when requested to clear system context.
             $contextwhere = "NOT EXISTS (SELECT 1 FROM {context} c WHERE c.id = contextid)";
             $contextparams = [];
 
