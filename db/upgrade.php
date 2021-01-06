@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @param int $oldversion
  * @param object $block
- * @return void
+ * @return bool
  */
 function xmldb_block_znanium_com_upgrade($oldversion, $block) {
     global $DB;
@@ -68,6 +68,16 @@ function xmldb_block_znanium_com_upgrade($oldversion, $block) {
         upgrade_block_savepoint(true, 2015110800, 'znanium_com');
     }
 
-    return true;
+    if ($oldversion < 2021010601) {
+        // Define table block_znanium_com_visits to be created.
+        $table = new xmldb_table('block_znanium_com_visits');
+        $field = new xmldb_field('userid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'time');
+        $key = new xmldb_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $dbman->drop_key($table, $key);
+        $dbman->change_field_notnull($table, $field);
+        $dbman->add_key($table, $key);
+        upgrade_block_savepoint(true, 2021010601, 'znanium_com');
+    }
 
+    return true;
 }
