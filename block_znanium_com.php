@@ -110,8 +110,7 @@ class block_znanium_com extends block_base {
                 $text = get_string('defaultlink', 'block_znanium_com');
             }
             $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $this->page->context->id));
-            $link = new action_link($url, $text);
-            $link->attributes = array('target' => '_blank');
+            $link = new action_link($url, $text, null, array('target' => '_blank'));
             $this->content->text = html_writer::div($OUTPUT->render($link));
         }
 
