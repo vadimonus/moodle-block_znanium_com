@@ -24,8 +24,6 @@
 
 namespace block_znanium_com\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Event class for site visit
  *

@@ -38,7 +38,7 @@ $documentid = optional_param('documentid', null, PARAM_INT);
 $page = optional_param('page', null, PARAM_INT);
 
 $params = array(
-    'contextid' => $contextid
+    'contextid' => $contextid,
 );
 $event = \block_znanium_com\event\link_used::create($params);
 $event->trigger();

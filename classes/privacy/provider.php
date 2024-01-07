@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+
 namespace block_znanium_com\privacy;
 
 use context;
@@ -59,8 +61,7 @@ class provider implements
     core_userlist_provider,
 
     // The plugin provides data directly to core.
-    \core_privacy\local\request\plugin\provider
-{
+    \core_privacy\local\request\plugin\provider {
 
     use \core_privacy\local\legacy_polyfill;
 

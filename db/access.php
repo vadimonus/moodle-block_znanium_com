@@ -30,9 +30,9 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
-            'user' => CAP_ALLOW
+            'user' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+        'clonepermissionsfrom' => 'moodle/my:manageblocks',
     ),
 
     'block/znanium_com:addinstance' => array(
@@ -41,25 +41,25 @@ $capabilities = array(
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+            'manager' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+        'clonepermissionsfrom' => 'moodle/site:manageblocks',
     ),
 
     'block/znanium_com:viewstats' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
-            'manager' => CAP_ALLOW
+            'manager' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' => 'report/log:view'
+        'clonepermissionsfrom' => 'report/log:view',
     ),
 
     'block/znanium_com:use' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
-    )
+            'user' => CAP_ALLOW,
+        ),
+    ),
 );
