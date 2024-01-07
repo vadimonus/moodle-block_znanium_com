@@ -38,7 +38,7 @@ use core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
 
-// For compatibility with Moodle 3.3 and eearlier.
+// For compatibility with Moodle 3.3 and earlier.
 if (!interface_exists('\core_privacy\local\request\core_userlist_provider')) {
     interface core_userlist_provider {
     }
