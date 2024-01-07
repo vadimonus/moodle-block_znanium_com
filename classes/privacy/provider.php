@@ -38,12 +38,14 @@ use core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
 
-if (interface_exists('\core_privacy\local\request\core_userlist_provider')) {
-    interface core_userlist_provider extends \core_privacy\local\request\core_userlist_provider {
-    }
-} else {
+// For compatibility with Moodle 3.3 and eearlier.
+if (!interface_exists('\core_privacy\local\request\core_userlist_provider')) {
     interface core_userlist_provider {
     }
+    class_alias(
+        '\block_znanium_com\privacy\core_userlist_provider',
+        '\core_privacy\local\request\core_userlist_provider'
+    );
 }
 
 /**
@@ -58,7 +60,7 @@ class provider implements
     \core_privacy\local\metadata\provider,
 
     // This plugin is capable of determining which users have data within it.
-    core_userlist_provider,
+    \core_privacy\local\request\core_userlist_provider,
 
     // The plugin provides data directly to core.
     \core_privacy\local\request\plugin\provider {
