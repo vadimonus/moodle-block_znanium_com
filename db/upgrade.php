@@ -46,12 +46,12 @@ function xmldb_block_znanium_com_upgrade($oldversion, $block) {
         $table->add_field('contextid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table block_znanium_com_visits.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_key('userid', XMLDB_KEY_FOREIGN, array('userid'), 'user', array('id'));
-        $table->add_key('contextid', XMLDB_KEY_FOREIGN, array('contextid'), 'context', array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $table->add_key('contextid', XMLDB_KEY_FOREIGN, ['contextid'], 'context', ['id']);
 
         // Adding indexes to table block_znanium_com_visits.
-        $table->add_index('time', XMLDB_INDEX_NOTUNIQUE, array('time'));
+        $table->add_index('time', XMLDB_INDEX_NOTUNIQUE, ['time']);
 
         // Conditionally launch create table for block_znanium_com_visits.
         if (!$dbman->table_exists($table)) {

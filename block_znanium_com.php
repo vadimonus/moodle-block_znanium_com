@@ -59,7 +59,7 @@ class block_znanium_com extends block_base {
      * @return array page-type prefix => true/false.
      */
     public function applicable_formats() {
-        return array('all' => true);
+        return ['all' => true];
     }
 
     /**
@@ -107,8 +107,8 @@ class block_znanium_com extends block_base {
             if (!$text) {
                 $text = get_string('defaultlink', 'block_znanium_com');
             }
-            $url = new moodle_url('/blocks/znanium_com/redirect.php', array('contextid' => $this->page->context->id));
-            $link = new action_link($url, $text, null, array('target' => '_blank'));
+            $url = new moodle_url('/blocks/znanium_com/redirect.php', ['contextid' => $this->page->context->id]);
+            $link = new action_link($url, $text, null, ['target' => '_blank']);
             $this->content->text = html_writer::div($OUTPUT->render($link));
         }
 

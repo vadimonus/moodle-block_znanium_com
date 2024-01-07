@@ -24,42 +24,42 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
 
-    'block/znanium_com:myaddinstance' => array(
+    'block/znanium_com:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/my:manageblocks',
-    ),
+    ],
 
-    'block/znanium_com:addinstance' => array(
+    'block/znanium_com:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/site:manageblocks',
-    ),
+    ],
 
-    'block/znanium_com:viewstats' => array(
+    'block/znanium_com:viewstats' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'report/log:view',
-    ),
+    ],
 
-    'block/znanium_com:use' => array(
+    'block/znanium_com:use' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW,
-        ),
-    ),
-);
+        ],
+    ],
+];

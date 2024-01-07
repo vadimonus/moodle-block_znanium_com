@@ -37,9 +37,9 @@ require_capability('block/znanium_com:use', $context);
 $documentid = optional_param('documentid', null, PARAM_INT);
 $page = optional_param('page', null, PARAM_INT);
 
-$params = array(
+$params = [
     'contextid' => $contextid,
-);
+];
 $event = \block_znanium_com\event\link_used::create($params);
 $event->trigger();
 
@@ -54,13 +54,13 @@ $domain = get_config('block_znanium_com', 'domain');
 
 $timestamp = gmdate('YmdHis');
 $signature = md5($domain . $USER->username . $timestamp . $secretkey);
-$params = array(
+$params = [
     'domain' => $domain,
     'username' => $USER->username,
     'gmt' => $timestamp,
     'token' => $signature,
     'fname' => $USER->firstname,
-    'lname' => $USER->lastname);
+    'lname' => $USER->lastname];
 if ($USER->middlename) {
     $params['mname'] = $USER->middlename;
 }

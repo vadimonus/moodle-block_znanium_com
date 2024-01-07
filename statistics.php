@@ -43,8 +43,8 @@ if ($timefirst) {
 
     $table = new html_table();
     $table->width = 'auto';
-    $table->head = array(get_string('month', 'block_znanium_com'), get_string('visits', 'block_znanium_com'));
-    $table->align = array('center', 'center');
+    $table->head = [get_string('month', 'block_znanium_com'), get_string('visits', 'block_znanium_com')];
+    $table->align = ['center', 'center'];
 
     $date = usergetdate(time());
     $year = $date['year'];
@@ -61,11 +61,12 @@ if ($timefirst) {
         $sql = "SELECT COUNT(id) AS count_id
             FROM {block_znanium_com_visits}
             WHERE time >= :timestart AND time < :timeend";
-        $params = array(
+        $params = [
             'timestart' => $timestart,
-            'timeend' => $timeend);
+            'timeend' => $timeend,
+        ];
         $count = $DB->get_field_sql($sql, $params);
-        $table->data[] = array($monthname, $count);
+        $table->data[] = [$monthname, $count];
 
         $month--;
         if ($month == 0) {
