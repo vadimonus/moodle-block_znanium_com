@@ -70,5 +70,5 @@ if ($documentid) {
         $params['page'] = $page;
     }
 }
-$url = new moodle_url('https://znanium.com/sso', $params);
+$url = new moodle_url('https://znanium.ru/sso', $params);
 redirect($url);
