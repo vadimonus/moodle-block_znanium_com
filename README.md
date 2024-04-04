@@ -1,4 +1,4 @@
-Authentication on znanium.com
+Authentication on znanium.ru
 ===============================
 
 This block is intended for use with russian digital library system Znanium, 
@@ -8,10 +8,10 @@ Author
 ------
 Vadim Dvorovenko (Vadimon@mail.ru)
 
-Блок аутентификации на сайте znanium.com
+Блок аутентификации на сайте znanium.ru
 ========================================
 
-Блок предназначен для автоматическей аутентификации пользователей moodle на сайте znanium.com.
+Блок предназначен для автоматическей аутентификации пользователей moodle на сайте znanium.ru.
 
 Данные для авторизации (домен и секретный ключ) зарегистрированные пользователи ЭБС могут получить,
 написав по адресу programmer@infra-m.ru
@@ -31,7 +31,7 @@ Vadim Dvorovenko (Vadimon@mail.ru)
 
 Ссылки
 ------
-- ЭБС Znanium: http://znanium.com/
+- ЭБС Znanium: http://znanium.ru/
 
 История изменений
 -----------------
