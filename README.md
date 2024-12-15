@@ -43,5 +43,5 @@ Vadim Dvorovenko (Vadimon@mail.ru)
     - Реализация Privacy API.
 - Релиз 2024-01-08:
   - Исправление warnings в новых версиях moodle.
-- Релиз 2020-04-03:
+- Релиз 2024-04-03:
   - Переключение на znanium.ru
